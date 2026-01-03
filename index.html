@@ -23,7 +23,6 @@ canvas { background:#f0f0f0; border-radius:50%; display:block; margin:0 auto 10p
 <div id="container"></div>
 
 <script>
-// --- 공통 유틸 ---
 function pad(num){ return num<10?'0'+num:num; }
 function zeroHourDate(str){
     const y=parseInt(str.slice(0,4));
@@ -57,7 +56,7 @@ function drawClock(canvasId,h,m,s){
 
 // --- 데이터 블록 생성 ---
 function createJSM(id, traStr, disStr, name){
-    if(document.getElementById(id)) return; // 이미 존재하면 종료
+    if(document.getElementById(id)) return;
 
     const block=document.createElement('div');
     block.className='jsm-block';
@@ -68,17 +67,24 @@ function createJSM(id, traStr, disStr, name){
         <div id="jsm-content-${id}"></div>
         <button id="toggle-${id}">백분율 자세히</button>
     `;
-    document.getElementById('container').appendChild(block);
 
-    // 상태
+    const container=document.getElementById('container');
+    // 정승민은 항상 좌측, 남찬서는 우측
+    if(id==='seongmin'){
+        block.style.order=0;
+        container.prepend(block);
+    }else{
+        block.style.order=1;
+        container.appendChild(block);
+    }
+
     let detailed=false;
     let updateInterval=1000;
     let intervalId=null;
 
-    // 버튼 토글
     document.getElementById(`toggle-${id}`).addEventListener('click',()=>{
         detailed=!detailed;
-        document.getElementById(`toggle-${id}`).textContent=detailed ? "백분율 간단히" : "백분율 자세히";
+        document.getElementById(`toggle-${id}`).textContent=detailed?"백분율 간단히":"백분율 자세히";
         clearInterval(intervalId);
         updateInterval=detailed?100:1000;
         intervalId=setInterval(calc,updateInterval);
@@ -104,7 +110,7 @@ function createJSM(id, traStr, disStr, name){
         const dday2=Math.ceil((dis-now)/msPerDay);
 
         let cent1=0;
-        const sgt=zeroHourDate("20251101"); // 병장 기준 고정
+        const sgt=zeroHourDate("20251101");
         if(now>=sgt){
             const totalSec=(dis-sgt)/1000;
             const elapsedSec=(now-sgt)/1000;
@@ -134,16 +140,9 @@ function createJSM(id, traStr, disStr, name){
 
     calc();
     intervalId=setInterval(calc,updateInterval);
-
-    // 영역 제거 기능 (숨기기)
-    document.getElementById(`btn-${id}`).addEventListener('click',()=>{
-        if(document.getElementById(id)){
-            block.remove();
-        }
-    });
 }
 
-// --- 버튼 클릭 이벤트 ---
+// --- 버튼 이벤트 ---
 document.getElementById('btn-seongmin').addEventListener('click',()=>{
     const btn=document.getElementById('btn-seongmin');
     if(btn.textContent.includes("표시")){
