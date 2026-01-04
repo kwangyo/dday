@@ -126,12 +126,30 @@ function createJSM(id, traStr, disStr, name){
         let clock_second=Math.floor((((totalHours-clock_hour)*60)-clock_minute)*60);
         if(clock_hour>=24){clock_minute=0;clock_second=0;}
 
+        let loc;
+        if (id === 'seongmin') {
+          loc = `
+              <a href="https://namu.wiki/w/%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD%20%EC%9C%A1%EA%B5%B0" target="_blank">육군</a>
+              <a href="https://namu.wiki/w/%EC%A0%9C22%EB%B3%B4%EB%B3%91%EC%82%AC%EB%8B%A8" target="_blank">제22보병사단</a>
+              <a href="https://namu.wiki/w/%EC%A0%9C22%EB%B3%B4%EB%B3%91%EC%82%AC%EB%8B%A8%20%ED%8F%AC%EB%B3%91%EC%97%AC%EB%8B%A8" target="_blank">포병여단</a>
+              <br> 제280포병대대 2포대
+        `;
+        } else {
+          loc = `
+              <a href="https://namu.wiki/w/%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD%20%EC%9C%A1%EA%B5%B0" target="_blank">육군</a>
+              <a href="https://namu.wiki/w/%EC%A0%9C1%EA%B8%B0%EA%B0%91%EC%97%AC%EB%8B%A8" target="_blank">제1기갑여단</a>
+              전투근무지원대대 <br>보급수송중대 추진보급소대
+        `;
+        }
+
+
         document.getElementById(`jsm-content-${id}`).innerHTML=`
             <div class="field"><span class="label">계급:</span> 병장</div>
+            <div class="field"><span class="label">소속:</span> ${loc}</div>
             <div class="field"><span class="label">전역 디데이:</span> ${dday2}</div>
             <div class="field"><span class="label">병장 백분율:</span> ${text1} ${cent1Str}%</div>
             <div class="field"><span class="label">군생활 백분율:</span> ${text2} ${cent2Str}% (${dur_now}/${dur_total})</div>
-            <div class="field"><span class="label">국방부 시계:</span> ${pad(clock_hour)}시 ${pad(clock_minute)}분 ${pad(clock_second)}초</div>
+            <div class="field"><span class="label">국방부시계:</span> ${pad(clock_hour)}시 ${pad(clock_minute)}분 ${pad(clock_second)}초</div>
             <div class="field"><span class="label">입영일:</span> ${tra.getFullYear()}년 ${tra.getMonth()+1}월 ${tra.getDate()}일</div>
             <div class="field"><span class="label">전역일:</span> ${dis.getFullYear()}년 ${dis.getMonth()+1}월 ${dis.getDate()}일</div>
         `;
